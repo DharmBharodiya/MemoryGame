@@ -90,6 +90,7 @@ const App = () => {
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchTracker, setMatchTracker] = useState([]);
   const [winDialog, setWinDialog] = useState(false);
+  const [shuffleCardBtn, setShuffleCardBtn] = useState(false);
 
   const handleClick = (fruit) => {
     if (flippedCards.length == 2 || fruit.isFlipped || fruit.isMatched) return;
@@ -102,6 +103,10 @@ const App = () => {
     setFlippedCards([...flippedCards, fruit]);
     setMoves((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    console.log(fruits.map((fruit) => fruit.name + " " + fruit.id));
+  }, []);
 
   useEffect(() => {
     const filteredCards = fruits.filter((fruit) => fruit.isFlipped === true);
@@ -123,6 +128,11 @@ const App = () => {
     setFruits((prev) =>
       prev.map((f) => ({ ...f, isFlipped: false, isMatched: false })),
     );
+    const shuffledFruits = shuffleCards(fruits);
+    if (shuffleCardBtn) {
+      setFruits(shuffledFruits);
+    }
+    setShuffleCardBtn((prev) => !prev);
     setMoves(0);
     setWinDialog((prev) => !prev);
   };
@@ -183,7 +193,7 @@ const App = () => {
 
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           {winDialog ? (
-            <div className="bg-red-600/70 border border-red-600 px-6 py-4 rounded-xl w-130 h-50 sm:w-40 flex justify-center items-center flex-col">
+            <div className="bg-red-600/70 border border-red-600 px-6 py-4 rounded-xl w-130 h-50 flex justify-center items-center flex-col">
               <h1 className="font-bold text-2xl">
                 {score === 8
                   ? "WOOHOOO! Well Played"
