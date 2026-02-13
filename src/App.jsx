@@ -90,7 +90,7 @@ const App = () => {
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchTracker, setMatchTracker] = useState([]);
   const [winDialog, setWinDialog] = useState(false);
-  const [shuffleCardBtn, setShuffleCardBtn] = useState(false);
+  // Removed shuffleCardBtn state, always shuffle after every game
 
   const handleClick = (fruit) => {
     if (flippedCards.length == 2 || fruit.isFlipped || fruit.isMatched) return;
@@ -125,14 +125,14 @@ const App = () => {
   };
 
   const handleContinue = () => {
-    setFruits((prev) =>
-      prev.map((f) => ({ ...f, isFlipped: false, isMatched: false })),
-    );
-    const shuffledFruits = shuffleCards(fruits);
-    if (shuffleCardBtn) {
-      setFruits(shuffledFruits);
-    }
-    setShuffleCardBtn((prev) => !prev);
+    // Reset all cards and always shuffle
+    const resetFruits = fruits.map((f) => ({
+      ...f,
+      isFlipped: false,
+      isMatched: false,
+    }));
+    const shuffledFruits = shuffleCards(resetFruits);
+    setFruits(shuffledFruits);
     setMoves(0);
     setWinDialog((prev) => !prev);
   };
